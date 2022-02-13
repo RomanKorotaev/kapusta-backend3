@@ -1,0 +1,608 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "1.0.0",
+    "title": "Kapusta web app",
+    "license": {
+      "name": "Kausta",
+      "url": "Link to our website"
+    }
+  },
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "servers": [{ "url": "http://localhost:3000" }],
+  "tags": [
+    {
+      "name": "Users",
+      "description": "Authorization endpoints"
+    },
+    {
+      "name": "Transaction",
+      "description": "Transaction endpoints"
+    }
+  ],
+  "paths": {
+    "/api/users/registration": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "User registration",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation"
+          },
+          "400": {
+            "description": "Bad request (invalid request body)"
+          },
+          "409": {
+            "description": "Email already exists"
+          },
+          "500": {
+            "description": "Server's error"
+          }
+        }
+      }
+    },
+    "/api/users/login": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "User login",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad request (invalid request body)"
+          },
+          "401": {
+            "description": "Invalid credentials"
+          },
+          "500": {
+            "description": "Server's error"
+          }
+        }
+      }
+    },
+    "/api/users/logout": {
+      "post": {
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token issued to the current user."
+          }
+        ],
+        "summary": "User logout",
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "500": {
+            "description": "Server's error"
+          }
+        }
+      }
+    },
+    "/api/users/update": {
+      "patch": {
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token issued to the current user."
+          },
+          {
+            "in": "req.user",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "User's id"
+          }
+        ],
+        "summary": "Update name or balance of user",
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad request (invalid request body)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "500": {
+            "description": "Server's error"
+          }
+        }
+      }
+    },
+    "/api/transaction/expense": {
+      "post": {
+        "tags": ["Transaction"],
+        "summary": "Add transaction of expense",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token issued to the current user."
+          },
+          {
+            "in": "req.user",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "User's id"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddExpenseTransactionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation"
+          },
+          "400": {
+            "description": "Bad request (invalid request body)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "500": {
+            "description": "Server's error"
+          }
+        }
+      }
+    },
+    "/api/transaction/income": {
+      "post": {
+        "tags": ["Transaction"],
+        "summary": "Add transaction of income",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token issued to the current user."
+          },
+          {
+            "in": "req.user",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "User's id"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddIncomeTransactionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation"
+          },
+          "400": {
+            "description": "Bad request (invalid request body)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "500": {
+            "description": "Server's error"
+          }
+        }
+      }
+    },
+    "/api/transaction/{ id }": {
+      "put": {
+        "tags": ["Transaction"],
+        "summary": "Update transaction",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token issued to the current user."
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "Transaction's id"
+          },
+          {
+            "in": "req.user",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "User's id"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTransactionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "400": {
+            "description": "Bad request (invalid id)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "500": {
+            "description": "Server's error"
+          }
+        }
+      }
+    },
+    "/api/transaction/{id}": {
+      "delete": {
+        "tags": ["Transaction"],
+        "summary": "Delete transaction",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token issued to the current user."
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "Transaction's id"
+          },
+          {
+            "in": "req.user",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "User's id"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "400": {
+            "description": "Bad request (invalid id)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "500": {
+            "description": "Server's error"
+          }
+        }
+      }
+    },
+    "/api/transaction/month?month={month}&year={tear}": {
+      "get": {
+        "tags": ["Transaction"],
+        "summary": "Get statistic for specific month and year",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token issued to the current user."
+          },
+          {
+            "in": "req.user",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "User's id"
+          },
+          {
+            "in": "query",
+            "name": "month",
+            "required": true,
+            "type": "string",
+            "description": "Month  of creation transaction"
+          },
+          {
+            "in": "query",
+            "name": "year",
+            "required": true,
+            "type": "string",
+            "description": "Year  of creation transaction"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "400": {
+            "description": "Bad request (invalid query string or id)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "500": {
+            "description": "Server's error"
+          }
+        }
+      }
+    },
+    "/api/transaction/summary?type={expense / income}": {
+      "get": {
+        "tags": ["Transaction"],
+        "summary": "Get all transactions of expense or income and summary for last 6 month for them",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token issued to the current user."
+          },
+          {
+            "in": "req.user",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "User's id"
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "required": true,
+            "type": "string",
+            "description": "expense of income"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "400": {
+            "description": "Bad request (invalid query string or id)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "500": {
+            "description": "Server's error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RegistrationRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "example": "example@example.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "example password"
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "example": "example@example.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "example password"
+          }
+        }
+      },
+      "UpdateRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name"
+          },
+          "balance": {
+            "type": "string",
+            "description": "User's balance"
+          }
+        }
+      },
+      "AddExpenseTransactionRequest": {
+        "type": "object",
+        "required": ["category", "sum", "description", "dayCreate", "monthCreate", "yearCreate"],
+        "properties": {
+          "category": {
+            "type": "string",
+            "description": "Category of transaction",
+            "example": "transport / food / health / alcohol / entertainment / housing / technics / communal / sport / education / other"
+          },
+          "sum": {
+            "type": "number",
+            "description": "Sum of transaction",
+            "example": 1000
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of transaction"
+          },
+          "dayCreate": {
+            "type": "number",
+            "description": "Create's day of transaction",
+            "example": 1
+          },
+          "monthCreate": {
+            "type": "number",
+            "description": "Create's month of transaction",
+            "example": 2
+          },
+          "yearCreate": {
+            "type": "number",
+            "description": "Create's year of transaction",
+            "example": 2022
+          }
+        }
+      },
+      "AddIncomeTransactionRequest": {
+        "type": "object",
+        "required": ["category", "sum", "description", "dayCreate", "monthCreate", "yearCreate"],
+        "properties": {
+          "category": {
+            "type": "string",
+            "description": "Category of transaction",
+            "example": "salary / additionalincome"
+          },
+          "sum": {
+            "type": "number",
+            "description": "Sum of transaction",
+            "example": 1000
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of transaction"
+          },
+          "dayCreate": {
+            "type": "number",
+            "description": "Create's day of transaction",
+            "example": 1
+          },
+          "monthCreate": {
+            "type": "number",
+            "description": "Create's month of transaction",
+            "example": 2
+          },
+          "yearCreate": {
+            "type": "number",
+            "description": "Create's year of transaction",
+            "example": 2022
+          }
+        }
+      },
+      "UpdateTransactionRequest": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "description": "Category of transaction",
+            "example": "transport / food / health / alcohol / entertainment / housing / technics / communal / sport / education / other / salary / additionalincome"
+          },
+          "sum": {
+            "type": "number",
+            "description": "Sum of transaction",
+            "example": 1000
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of transaction"
+          },
+          "dayCreate": {
+            "type": "number",
+            "description": "Create's day of transaction",
+            "example": 1
+          },
+          "monthCreate": {
+            "type": "number",
+            "description": "Create's month of transaction",
+            "example": 2
+          },
+          "yearCreate": {
+            "type": "number",
+            "description": "Create's year of transaction",
+            "example": 2022
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "name": "kapusta-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cross-env NODE_ENV=production node --experimental-json-modules -r dotenv/config index.js",
+    "dev": "nodemon --experimental-json-modules --trace-warnings -r dotenv/config index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Roman-Lahoda/kapusta-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Roman-Lahoda/kapusta-backend/issues"
+  },
+  "homepage": "https://github.com/Roman-Lahoda/kapusta-backend#readme",
+  "dependencies": {
+    "axios": "^0.25.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.2",
+    "helmet": "^5.0.2",
+    "joi": "^17.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.2.0",
+    "passport-google-oauth": "^2.0.0",
+    "query-string": "^7.1.1",
+    "swagger-ui-express": "^4.3.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/node": "^17.0.15",
+    "nodemon": "^2.0.15"
+  }
+}
