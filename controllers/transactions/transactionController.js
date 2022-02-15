@@ -219,7 +219,7 @@ class TransactionController {
           category: 'salary',
         })
         .populate({ path: 'owner', select: 'email id balance' });
-      const additionalIncome = await transactionModel
+      const additionalincome = await transactionModel
         .find({
           owner: userId,
           monthCreate: month,
